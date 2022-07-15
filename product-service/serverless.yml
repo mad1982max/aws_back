@@ -8,8 +8,8 @@ provider:
   region: us-east-1
 
 functions:
-  getProductsById:
-    handler: handler.getProductsById
+  getProductById:
+    handler: handler.getProductById
     events:
       - httpApi:
           method: get
