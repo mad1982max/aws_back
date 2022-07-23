@@ -5,5 +5,8 @@
   "version": "1.0",
   "main": "index.js",
   "author": "Bezrodnyi Maksym",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.7.3"
+  }
 }

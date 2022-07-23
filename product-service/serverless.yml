@@ -6,6 +6,10 @@ provider:
   runtime: nodejs16.x
   stage: dev
   region: us-east-1
+  environment: ${file(./${self:custom.dbCredFileName}.yml)}
+
+custom:
+  dbCredFileName: db-credentials
 
 functions:
   getProductById:
@@ -19,4 +23,10 @@ functions:
     events:
       - httpApi:
           method: get
+          path: /products
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - httpApi:
+          method: post
           path: /products
