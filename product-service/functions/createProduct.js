@@ -1,7 +1,7 @@
 import pg from "pg";
 import { handleResponse } from "../helpers/handleResponse.js";
 import { DB_Options } from "../helpers/db/db_options.js";
-import { error } from "../helpers/constants.js";
+import { success_msg, error_code } from "../constants.js";
 
 export const createProduct = async (event) => {
   try {
@@ -13,9 +13,9 @@ export const createProduct = async (event) => {
       (${title}, ${description}, ${price})
     `;
     const result = await client.query(query_createProduct);
-    return handleResponse("product was created");
+    return handleResponse({ message: success_msg.CREATED });
   } catch (e) {
-    return handleResponse(e.message, error._500);
+    return handleResponse({ message: e.message }, error_code._500);
   } finally {
     client.end();
   }
