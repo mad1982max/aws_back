@@ -1,6 +1,44 @@
 # aws_back
 
-## Task 3
+## Task 4-----------------------------------
+
+**FE LINK**: Web App Domain: d1pamqutpae0js.cloudfront.net
+
+**BE END POINTS**
+GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products/{productId}
+GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
+POST - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
+
+**Preliminary work**:
+
+- Rename file **db-credentials_empty.yml** to **db-credentials.yml**
+- Fill it with your credentials for DB
+
+**DONE**
+
+- Task 4.1 :
+
+  - created a database instance in _RDS_
+  - created 2 tables (_products_, _stocks_) with _DBeaver_
+  - added _SQL script_: **helpers/db/sql_fillByData.js** and fill tables with data
+
+- Task 4.2:
+
+  - Extended serverless.yml file with credentials to database instance and passed it to lambda’s environment
+  - Integrated _GET/products_ lambda to return a list of products from the database (joined stocks and products tables). Product instance on FE side is joined model of product and stock by productId.
+  - environment variables stored to _.gitignore_
+  - Integrated _GET/products/{productId}_ lambda to return a product from the database
+
+- Task 4.3:
+
+  - Implemented POST/products lambda and implemented its logic
+
+- Task 4.4:
+
+  - Committed all work to separate branches (e.g. task-4 from master) in BE (backend) and if in FE (frontend) repositories.
+  - Created a pull request to the master branch.
+
+## Task 3-----------------------------------
 
 # 1. Main: _all done_
 
