@@ -1,21 +1,24 @@
 import pg from "pg";
-import { handleResponse } from "../helpers/handleResponse.js";
+import { successResponse, errorResponse } from "../helpers/handleResponse.js";
+import { logger } from "../helpers/logger.js";
 import { DB_Options } from "../helpers/db/db_options.js";
 import { error_code } from "../constants.js";
 
 export const getProductById = async (event) => {
   const client = new pg.Client(DB_Options);
-  await client.connect();
   try {
-    const { productId } = event.pathParameters;
+    logger(event);
+    await client.connect();
 
+    const { productId } = event.pathParameters;
     const query_getProductById = /*sql*/ `
       select * from products left join stocks on products.id=stocks.product_id where id='${productId}'
     `;
     const result = await client.query(query_getProductById);
-    return handleResponse({ data: result.rows });
+    return successResponse({ data: result.rows });
   } catch (e) {
-    return handleResponse({ message: e.message }, error_code._404);
+    const customError = new MyError(e, error_code._500);
+    return errorResponse(customError);
   } finally {
     client.end();
   }

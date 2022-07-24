@@ -1,5 +1,6 @@
 export const error_msg = {
   PRODUCT_NOT_FOUND: "Product not found",
+  DEFAULT: "Server error",
 };
 
 export const success_msg = {
