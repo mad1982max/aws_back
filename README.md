@@ -10,10 +10,22 @@
 
 - https://github.com/mad1982max/shop-react-redux-cloudfront/pull/3
 
-**BackEnd END POINTS**
+**BackEnd END POINTS**  
 GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products/{productId}  
 GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products  
 POST - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
+
+**Schemas**
+
+- Product:
+
+```js
+{
+  title: string,
+  description: string,
+  price: number,
+}
+```
 
 **Preliminary work**:
 
