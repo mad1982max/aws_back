@@ -2,11 +2,17 @@
 
 ## Task 4-----------------------------------
 
-**FE LINK**: Web App Domain: d1pamqutpae0js.cloudfront.net
+**FE LINK**:
 
-**BE END POINTS**
-GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products/{productId}
-GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
+- Web App Domain: d1pamqutpae0js.cloudfront.net
+
+**FrontEnd PR**:
+
+- https://github.com/mad1982max/shop-react-redux-cloudfront/pull/3
+
+**BackEnd END POINTS**
+GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products/{productId}  
+GET - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products  
 POST - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
 
 **Preliminary work**:
@@ -16,27 +22,34 @@ POST - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
 
 **DONE**
 
-- Task 4.1 :
+- **Main** ALL
 
-  - created a database instance in _RDS_
-  - created 2 tables (_products_, _stocks_) with _DBeaver_
-  - added _SQL script_: **helpers/db/sql_fillByData.js** and fill tables with data
+  - Task 4.1 :
 
-- Task 4.2:
+    - created a database instance in _RDS_
+    - created 2 tables (_products_, _stocks_) with _DBeaver_
+    - added _SQL script_: **helpers/db/sql_fillByData.js** and fill tables with data
 
-  - Extended serverless.yml file with credentials to database instance and passed it to lambda’s environment
-  - Integrated _GET/products_ lambda to return a list of products from the database (joined stocks and products tables). Product instance on FE side is joined model of product and stock by productId.
-  - environment variables stored to _.gitignore_
-  - Integrated _GET/products/{productId}_ lambda to return a product from the database
+  - Task 4.2:
 
-- Task 4.3:
+    - Extended serverless.yml file with credentials to database instance and passed it to lambda’s environment
+    - Integrated _GET/products_ lambda to return a list of products from the database (joined stocks and products tables). Product instance on FE side is joined model of product and stock by productId.
+    - environment variables stored to _.gitignore_
+    - Integrated _GET/products/{productId}_ lambda to return a product from the database
 
-  - Implemented POST/products lambda and implemented its logic
+  - Task 4.3:
 
-- Task 4.4:
+    - Implemented POST/products lambda and implemented its logic (created a new item in a products table)
 
-  - Committed all work to separate branches (e.g. task-4 from master) in BE (backend) and if in FE (frontend) repositories.
-  - Created a pull request to the master branch.
+  - Task 4.4:
+
+    - Committed all work to separate branches (e.g. task-4 from master) in BE (backend) and if in FE (frontend) repositories.
+    - Created a pull request to the master branch.
+
+- **Additional** 2 from 4
+
+  - All lambdas return error 500 status code on any error (DB connection, any unhandled error in code)
+  - All lambdas do console.log for each incoming requests and their arguments
 
 ## Task 3-----------------------------------
 
