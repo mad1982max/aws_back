@@ -1,0 +1,13 @@
+{
+  "name": "img-back",
+  "type": "module",
+  "description": "shop-back aws",
+  "version": "1.0",
+  "main": "index.js",
+  "author": "Bezrodnyi Maksym",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1184.0",
+    "csv-parser": "^3.0.0"
+  }
+}
