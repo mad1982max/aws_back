@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
 import csv from "csv-parser";
-import { BUCKET, UPLOADED_FOLDER } from "../constants.js";
+import { BUCKET, UPLOADED_FOLDER, PARSED_FOLDER } from "../constants.js";
 
 export const importFileParser = async (event) => {
   try {
@@ -16,6 +16,7 @@ export const importFileParser = async (event) => {
     const s3Response = await s3.listObjectsV2(objParams).promise();
     const files = s3Response.Contents.filter((file) => file.Size);
     const file = files[0];
+    const fileName = file.Key.split("/")[1].split(".")[0];
     const parsedData = [];
 
     const params = {
@@ -32,6 +33,24 @@ export const importFileParser = async (event) => {
     }
 
     console.log("---parsedData---", parsedData);
+
+    //write to new Folder
+    await s3
+      .putObject({
+        Bucket: BUCKET,
+        Key: `${PARSED_FOLDER}/${fileName}.json`,
+        Body: JSON.stringify(parsedData),
+        ContentType: "application/json",
+      })
+      .promise();
+
+    //delete old File
+    await s3
+      .deleteObject({
+        Bucket: BUCKET,
+        Key: file.Key,
+      })
+      .promise();
   } catch (e) {
     console.log("**error**", e);
   }
