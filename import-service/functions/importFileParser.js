@@ -15,36 +15,24 @@ export const importFileParser = async (event) => {
 
     const s3Response = await s3.listObjectsV2(objParams).promise();
     const files = s3Response.Contents.filter((file) => file.Size);
+    const file = files[0];
+    const parsedData = [];
 
-    for (let file of files) {
-      const parsedData = [];
+    const params = {
+      Bucket: BUCKET,
+      Key: file.Key,
+    };
 
-      const params = {
-        Bucket: BUCKET,
-        Key: file.Key,
-      };
+    console.log("--file--", file, params);
+    const s3Stream = s3.getObject(params).createReadStream();
 
-      console.log("--file--", file, params);
-
-      const s3Stream = s3.getObject(params).createReadStream();
-
-      s3Stream
-        .pipe(csv())
-        .on("data", (dataChunk) => {
-          console.log("**data-chunk**", dataChunk);
-          parsedData.push(dataChunk);
-        })
-        .on("error", (e) => console.log("**error**", e))
-        .on("end", () => console.log("**end**", parsedData));
+    for await (const chunk of s3Stream.pipe(csv())) {
+      console.log("**chunk**", chunk);
+      parsedData.push(chunk);
     }
 
-    return {
-      statusCode: 202,
-    };
+    console.log("---parsedData---", parsedData);
   } catch (e) {
     console.log("**error**", e);
-    return {
-      statusCode: 500,
-    };
   }
 };
