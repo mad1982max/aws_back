@@ -18,21 +18,17 @@ export const importProductFile = async (event) => {
       region: "us-east-1",
     });
 
-    const params = {
+    const Key = `${UPLOADED_FOLDER}/${fileName}`;
+
+    const s3Params = {
       Bucket: BUCKET,
-      Prefix: `${UPLOADED_FOLDER}/`,
+      Key,
     };
+    const signed_url = await s3.getSignedUrlPromise("putObject", s3Params);
 
-    const s3Response = await s3.listObjectsV2(params).promise();
-    const files = s3Response.Contents;
-
-    const file = files.find((file) => file.Key === `${UPLOADED_FOLDER}/${fileName}`);
-    if (!file) {
-      throw new MyError({ status: error_code._404, message: error_msg.NOT_FOUND });
-    }
-    const signed_url = `https://${BUCKET}.s3.amazonaws.com/${file.Key}`;
-    return successResponse({ data: { signed_url } });
+    return successResponse({ signed_url });
   } catch (error) {
+    console.log("***err***", error);
     return errorResponse(error);
   }
 };
