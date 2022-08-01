@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import csv from "csv-parser";
 import { BUCKET, UPLOADED_FOLDER, PARSED_FOLDER } from "../constants.js";
+import { error_code, success_code } from "../constants";
 
 export const importFileParser = async (event) => {
   try {
@@ -53,12 +54,12 @@ export const importFileParser = async (event) => {
       .promise();
 
     return {
-      statusCode: 202,
+      statusCode: success_code._202,
     };
   } catch (e) {
     console.log("**error**", e);
     return {
-      statusCode: 500,
+      statusCode: error_code._500,
     };
   }
 };

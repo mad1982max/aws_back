@@ -10,6 +10,11 @@ export const error_code = {
   _400: 400,
 };
 
+export const success_code = {
+  _200: 200,
+  _202: 202,
+};
+
 export const BUCKET = "files-bucket-aws";
 export const UPLOADED_FOLDER = "uploaded";
 export const PARSED_FOLDER = "parsed";
