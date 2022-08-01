@@ -24,7 +24,7 @@ export const importFileParser = async (event) => {
       Key: file.Key,
     };
 
-    console.log("--file--", file, params);
+    console.log("--file to parse--", file, params);
     const s3Stream = s3.getObject(params).createReadStream();
 
     for await (const chunk of s3Stream.pipe(csv())) {
@@ -34,7 +34,7 @@ export const importFileParser = async (event) => {
 
     console.log("---parsedData---", parsedData);
 
-    //write to new Folder
+    //write parsed file to new Folder
     await s3
       .putObject({
         Bucket: BUCKET,
@@ -51,7 +51,14 @@ export const importFileParser = async (event) => {
         Key: file.Key,
       })
       .promise();
+
+    return {
+      statusCode: 202,
+    };
   } catch (e) {
     console.log("**error**", e);
+    return {
+      statusCode: 500,
+    };
   }
 };
