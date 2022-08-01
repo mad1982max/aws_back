@@ -1,4 +1,4 @@
-import { error_code, success_code } from "../constants";
+import { error_code, success_code } from "../constants.js";
 
 const CORSHeaders = {
   "Access-Control-Allow-Headers": "Content-Type",

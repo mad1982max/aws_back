@@ -1,7 +1,7 @@
 import AWS from "aws-sdk";
 import csv from "csv-parser";
 import { BUCKET, UPLOADED_FOLDER, PARSED_FOLDER } from "../constants.js";
-import { error_code, success_code } from "../constants";
+import { error_code, success_code } from "../constants.js";
 
 export const importFileParser = async (event) => {
   try {
