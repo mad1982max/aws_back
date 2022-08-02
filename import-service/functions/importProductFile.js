@@ -1,9 +1,8 @@
-// import { AWS } from "aws-sdk";
 import AWS from "aws-sdk";
 import { successResponse, errorResponse } from "../helpers/handleResponse.js";
 import { logger } from "../helpers/logger.js";
 import { MyError } from "../helpers/handleError.js";
-import { error_code, error_msg, BUCKET, UPLOADED_FOLDER } from "../constants.js";
+import { error_msg, statusCodes, folders, BUCKET, REGION } from "../constants.js";
 
 export const importProductFile = async (event) => {
   try {
@@ -11,18 +10,16 @@ export const importProductFile = async (event) => {
     const fileName = event?.queryStringParameters?.name;
 
     if (!fileName) {
-      throw new MyError({ status: error_code._400, message: error_msg.BAD_REQUEST });
+      throw new MyError({ status: statusCodes.BAD_REQUEST, message: error_msg.BAD_REQUEST });
     }
 
     const s3 = new AWS.S3({
-      region: "us-east-1",
+      region: REGION,
     });
-
-    const Key = `${UPLOADED_FOLDER}/${fileName}`;
 
     const s3Params = {
       Bucket: BUCKET,
-      Key,
+      Key: `${folders.UPLOADED}/${fileName}`,
     };
     const signed_url = await s3.getSignedUrlPromise("putObject", s3Params);
 

@@ -1,17 +1,17 @@
 import AWS from "aws-sdk";
 import csv from "csv-parser";
-import { BUCKET, UPLOADED_FOLDER, PARSED_FOLDER } from "../constants.js";
-import { error_code, success_code } from "../constants.js";
+import { successResponse, errorResponse } from "../helpers/handleResponse.js";
+import { statusCodes, folders, BUCKET, REGION } from "../constants.js";
 
 export const importFileParser = async (event) => {
   try {
     const s3 = new AWS.S3({
-      region: "us-east-1",
+      region: REGION,
     });
 
     const objParams = {
       Bucket: BUCKET,
-      Prefix: `${UPLOADED_FOLDER}/`,
+      Prefix: `${folders.UPLOADED}/`,
     };
 
     const s3Response = await s3.listObjectsV2(objParams).promise();
@@ -39,7 +39,7 @@ export const importFileParser = async (event) => {
     await s3
       .putObject({
         Bucket: BUCKET,
-        Key: `${PARSED_FOLDER}/${fileName}.json`,
+        Key: `${folders.PARSED}/${fileName}.json`,
         Body: JSON.stringify(parsedData),
         ContentType: "application/json",
       })
@@ -53,13 +53,9 @@ export const importFileParser = async (event) => {
       })
       .promise();
 
-    return {
-      statusCode: success_code._202,
-    };
+    return successResponse(null, statusCodes.ACCEPTED);
   } catch (e) {
     console.log("**error**", e);
-    return {
-      statusCode: error_code._500,
-    };
+    return errorResponse(e, statusCodes.SERVER_ERROR);
   }
 };
