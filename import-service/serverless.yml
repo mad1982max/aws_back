@@ -1,0 +1,42 @@
+service: import-service2
+frameworkVersion: "3"
+
+custom:
+  bucketName: files-bucket-aws
+  folderName: uploaded
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom.bucketName}
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource:
+            - arn:aws:s3:::${self:custom.bucketName}/*
+
+functions:
+  importProductFile:
+    handler: handler.importProductFile
+    events:
+      - httpApi:
+          method: get
+          path: /import
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: ${self:custom.folderName}/
+          existing: true
