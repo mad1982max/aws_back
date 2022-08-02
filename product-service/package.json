@@ -1,0 +1,12 @@
+{
+  "name": "shop-back",
+  "type": "module",
+  "description": "shop-back aws",
+  "version": "1.0",
+  "main": "index.js",
+  "author": "Bezrodnyi Maksym",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.7.3"
+  }
+}

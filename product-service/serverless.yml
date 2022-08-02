@@ -1,0 +1,32 @@
+service: product-service
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+  environment: ${file(./${self:custom.dbCredFileName}.yml)}
+
+custom:
+  dbCredFileName: db-credentials
+
+functions:
+  getProductById:
+    handler: handler.getProductById
+    events:
+      - httpApi:
+          method: get
+          path: /products/{productId}
+  getProductsList:
+    handler: handler.getProductsList
+    events:
+      - httpApi:
+          method: get
+          path: /products
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - httpApi:
+          method: post
+          path: /products
