@@ -21,6 +21,23 @@ export const importFileParser = async (event) => {
 
     console.log("--PARSED DATA: ", parsedData);
 
+    const sqs = new AWS.SQS();
+    for (const item of parsedData) {
+      sqs.sendMessage(
+        {
+          QueueUrl: process.env.SQS_URL,
+          MessageBody: JSON.stringify(item),
+        },
+        (err, data) => {
+          if (err) {
+            console.log("**err", err);
+            throw Error(err.message);
+          }
+          console.log("***send message for:", data);
+        }
+      );
+    }
+
     //write parsed file to new Folder
     await s3
       .putObject({
