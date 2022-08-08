@@ -1,10 +1,53 @@
 # aws_back
 
-## Task 4-----------------------------------
+**Preliminary work**:
+
+- Rename file **db-credentials_empty.yml** to **db-credentials.yml**
+- Fill it with your credentials for DB
 
 **FE LINK**:
 
 - Web App Domain: d1pamqutpae0js.cloudfront.net
+
+## Task 6---------------------------------
+
+**MAIN TASKS:** _4 points_
+
+- File serverless.yml contains configuration for catalogBatchProcess function
+- File serverless.yml contains policies to allow lambda catalogBatchProcess function to interact with SNS and SQS
+- File serverless.yml contains configuration for SQS catalogItemsQueue
+- File serverless.yml contains configuration for SNS Topic createProductTopic and email subscription
+
+**ADDITIONAL TASKS:** _0 points_
+
+## Task 5----------------------------------
+
+**MAIN TASKS**
+
+- File **serverless.yml** contains configuration for **importProductsFile** function
+
+- The **importProductsFile** lambda function returns a correct **response** which can be used to upload a file into the S3 bucket
+
+**ENDPOINT**: https://k7ixi52g26.execute-api.us-east-1.amazonaws.com/import
+
+**QueryParam**
+
+```js
+{
+  name: string;
+}
+```
+
+- **Frontend** application is integrated with importProductsFile lambda
+
+- The **importFileParser** lambda function is implemented and **serverless.yml** contains configuration for the lambda - **DONE**
+
+**Additional (optional) tasks** (2 POINTS)
+
+- **+1** async/await is used in lambda functions
+- **+1** At the end of the stream the lambda function should move the file from the uploaded folder into the parsed folder (move the file means that file should be copied into parsed folder, and then deleted from uploaded folder)
+
+## Task 4-----------------------------------
 
 **FrontEnd PR**:
 
@@ -26,11 +69,6 @@ POST - https://ui834rx8q3.execute-api.us-east-1.amazonaws.com/products
   price: number,
 }
 ```
-
-**Preliminary work**:
-
-- Rename file **db-credentials_empty.yml** to **db-credentials.yml**
-- Fill it with your credentials for DB
 
 **DONE**
 

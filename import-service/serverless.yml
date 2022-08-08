@@ -1,0 +1,96 @@
+org: maksymbezrodnyi
+console: true
+service: import-service2
+frameworkVersion: "3"
+
+custom:
+  bucketName: files-bucket-aws
+  folderName: uploaded
+  email: mad1982max@gmail.com
+  topicName: createProductTopic
+  queueName: import-service2-queue
+  dbCredFileName: db-credentials
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-east-1
+
+  environment:
+    SQS_URL:
+      Ref: SQSQueue
+    SNS_ARN:
+      Ref: SNSTopic
+    PG_HOST: ${file(./${self:custom.dbCredFileName}.yml):PG_HOST}
+    PG_PORT: ${file(./${self:custom.dbCredFileName}.yml):PG_PORT}
+    PG_DATABASE: ${file(./${self:custom.dbCredFileName}.yml):PG_DATABASE}
+    PG_USERNAME: ${file(./${self:custom.dbCredFileName}.yml):PG_USERNAME}
+    PG_PASSWORD: ${file(./${self:custom.dbCredFileName}.yml):PG_PASSWORD}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${self:custom.bucketName}
+        - Effect: Allow
+          Action:
+            - s3:*
+          Resource:
+            - arn:aws:s3:::${self:custom.bucketName}/*
+        - Effect: Allow
+          Action: sqs:*
+          Resource:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn
+        - Effect: Allow
+          Action: sns:*
+          Resource:
+            Ref: SNSTopic
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.queueName}
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:custom.topicName}
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${self:custom.email}
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+
+functions:
+  importProductFile:
+    handler: handler.importProductFile
+    events:
+      - httpApi:
+          method: get
+          path: /import
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: ${self:custom.folderName}/
+          existing: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn
