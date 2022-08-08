@@ -22,11 +22,11 @@ provider:
       Ref: SQSQueue
     SNS_ARN:
       Ref: SNSTopic
-    PG_HOST: db-instance-1.cgmkknd7qphc.us-east-1.rds.amazonaws.com
-    PG_PORT: 5432
-    PG_DATABASE: db_0
-    PG_USERNAME: postgres
-    PG_PASSWORD: postgres
+    PG_HOST: ${file(./${self:custom.dbCredFileName}.yml):PG_HOST}
+    PG_PORT: ${file(./${self:custom.dbCredFileName}.yml):PG_PORT}
+    PG_DATABASE: ${file(./${self:custom.dbCredFileName}.yml):PG_DATABASE}
+    PG_USERNAME: ${file(./${self:custom.dbCredFileName}.yml):PG_USERNAME}
+    PG_PASSWORD: ${file(./${self:custom.dbCredFileName}.yml):PG_PASSWORD}
 
   iam:
     role:

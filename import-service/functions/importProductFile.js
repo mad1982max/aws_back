@@ -29,7 +29,7 @@ export const importProductFile = async (event) => {
 
     return successResponse({ signed_url });
   } catch (error) {
-    console.log("***err***", error);
+    console.log("--ERR:", error);
     return errorResponse(error);
   }
 };
