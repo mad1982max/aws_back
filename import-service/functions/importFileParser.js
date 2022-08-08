@@ -1,44 +1,30 @@
 import AWS from "aws-sdk";
 import csv from "csv-parser";
 import { successResponse, errorResponse } from "../helpers/handleResponse.js";
-import { statusCodes, folders, BUCKET, REGION } from "../constants.js";
+import { statusCodes, folders, BUCKET as Bucket, REGION as region } from "../constants.js";
 
 export const importFileParser = async (event) => {
   try {
-    const s3 = new AWS.S3({
-      region: REGION,
-    });
+    const s3 = new AWS.S3({ region });
+    const { key: Key } = event.Records[0].s3.object;
 
-    const objParams = {
-      Bucket: BUCKET,
-      Prefix: `${folders.UPLOADED}/`,
-    };
-
-    const s3Response = await s3.listObjectsV2(objParams).promise();
-    const files = s3Response.Contents.filter((file) => file.Size);
-    const file = files[0];
-    const fileName = file.Key.split("/")[1].split(".")[0];
+    const fileName = Key.split("/")[1].split(".")[0];
     const parsedData = [];
 
-    const params = {
-      Bucket: BUCKET,
-      Key: file.Key,
-    };
-
-    console.log("--file to parse--", file, params);
-    const s3Stream = s3.getObject(params).createReadStream();
+    const streamParams = { Bucket, Key };
+    const s3Stream = s3.getObject(streamParams).createReadStream();
 
     for await (const chunk of s3Stream.pipe(csv())) {
-      console.log("**chunk**", chunk);
+      console.log("--CHUNK: ", chunk);
       parsedData.push(chunk);
     }
 
-    console.log("---parsedData---", parsedData);
+    console.log("--PARSED DATA: ", parsedData);
 
     //write parsed file to new Folder
     await s3
       .putObject({
-        Bucket: BUCKET,
+        Bucket,
         Key: `${folders.PARSED}/${fileName}.json`,
         Body: JSON.stringify(parsedData),
         ContentType: "application/json",
@@ -46,16 +32,11 @@ export const importFileParser = async (event) => {
       .promise();
 
     //delete old File
-    await s3
-      .deleteObject({
-        Bucket: BUCKET,
-        Key: file.Key,
-      })
-      .promise();
+    await s3.deleteObject({ Bucket, Key }).promise();
 
     return successResponse(null, statusCodes.ACCEPTED);
-  } catch (e) {
-    console.log("**error**", e);
-    return errorResponse(e, statusCodes.SERVER_ERROR);
+  } catch (err) {
+    console.log("--ERROR", err);
+    return errorResponse(err, statusCodes.SERVER_ERROR);
   }
 };

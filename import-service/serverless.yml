@@ -40,3 +40,12 @@ functions:
           rules:
             - prefix: ${self:custom.folderName}/
           existing: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+        batchSize: 5
+        arn:
+          Fn::GetAtt:
+            - SQSQueue
+            - Arn
