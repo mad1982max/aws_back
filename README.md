@@ -9,6 +9,17 @@
 
 - Web App Domain: d1pamqutpae0js.cloudfront.net
 
+## Task 6---------------------------------
+
+**MAIN TASKS:** _4 points_
+
+- File serverless.yml contains configuration for catalogBatchProcess function
+- File serverless.yml contains policies to allow lambda catalogBatchProcess function to interact with SNS and SQS
+- File serverless.yml contains configuration for SQS catalogItemsQueue
+- File serverless.yml contains configuration for SNS Topic createProductTopic and email subscription
+
+**ADDITIONAL TASKS:** _0 points_
+
 ## Task 5----------------------------------
 
 **MAIN TASKS**

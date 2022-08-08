@@ -13,6 +13,8 @@ export const statusCodes = {
   SERVER_ERROR: 500,
 };
 
+export const emailSubject = "Products are created";
+
 export const BUCKET = "files-bucket-aws";
 export const REGION = "us-east-1";
 

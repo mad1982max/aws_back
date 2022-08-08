@@ -9,6 +9,7 @@ custom:
   email: mad1982max@gmail.com
   topicName: createProductTopic
   queueName: import-service2-queue
+  dbCredFileName: db-credentials
 
 provider:
   name: aws
@@ -21,6 +22,11 @@ provider:
       Ref: SQSQueue
     SNS_ARN:
       Ref: SNSTopic
+    PG_HOST: db-instance-1.cgmkknd7qphc.us-east-1.rds.amazonaws.com
+    PG_PORT: 5432
+    PG_DATABASE: db_0
+    PG_USERNAME: postgres
+    PG_PASSWORD: postgres
 
   iam:
     role:
